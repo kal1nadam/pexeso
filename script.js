@@ -17,20 +17,13 @@ var restartGameState = () => {
 
     }
 
-    var oneAlreadyFliped = false;
-    var firstCard = -1;
-    var secondCard = -2;
+    
 
 
     var boxes = document.getElementsByClassName("box")
     for(var b = 0; b < boxes.length; b++){
         boxes[b].addEventListener("click", (e)=>{
-            if(!oneAlreadyFliped){
-                flipFirst(e)
-            }
-            else{
-                flipSecond(e)
-            }
+            flipCard(e)
         })
     }
     return
@@ -42,17 +35,38 @@ var restartGameState = () => {
 restartGameState()
 
 
+var oneAlreadyFliped = false;
+var firstCard = -1;
+var secondCard = -2;
 
+var flipCard = (e)=>{
+    if(oneAlreadyFliped == false){
+        flipFirst(e)
+    }
+    else{
+        flipSecond(e)
+    }
+}
 
 var flipFirst = (e)=>{
     e.target.style.transform = "rotateY(180deg)"
-    // console.log(e.target.innerHTML)
-    firstCard = parseInt(e.target.innerHTML)
+    firstCard = e.target
     oneAlreadyFliped = true
 }
 
 var flipSecond = (e)=>{
-    secondCard = parseInt(e.target.innerHTML)
-    e.target.style.color = "black"
-
+    e.target.style.transform = "rotateY(180deg)"
+    secondCard = parseInt(e.target.getElementsByClassName("box-back")[0].innerHTML)
+    if(parseInt(firstCard.getElementsByClassName("box-back")[0].innerHTML) == secondCard){
+        console.log("MATCH!")
+    }
+    else{
+        console.log("notMatch!")
+        setTimeout(() => {
+            firstCard.style.transform = "rotateY(0deg)"
+            e.target.style.transform = "rotateY(0deg)"
+        }, 1000);
+    }
+    oneAlreadyFliped = false
+    
 }
