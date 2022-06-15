@@ -1,22 +1,37 @@
-
+var endPopUp = document.getElementById("endPopUp")
+var restartButton = document.getElementById("restartButton")
 var overScreen = document.getElementById("overScreen")
 var player1Score = document.getElementById("player1Score")
 var player2Score = document.getElementById("player2Score")
 var turn = document.getElementById("turn")
-var collectedCount = 0
+var collectedCount
+var player
+var oneAlreadyFliped
+var firstCard
+var secondCard
 
 
 var restartGameState = () => {
+    collectedCount = 0
+    player = 1
+    oneAlreadyFliped = false;
+    firstCard = -1;
+    secondCard = -2;
+
     var availableBoxes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36]
     for(var i = 0; i < 18;i++){
         //first from the pair
         var random = Math.floor((Math.random() * availableBoxes.length))
-        document.getElementById("box" + availableBoxes[random]).getElementsByClassName("box-back")[0].innerHTML = i
+        var box = document.getElementById("box" + availableBoxes[random]).getElementsByClassName("box-back")[0]
+        box.innerHTML = i
+        box.style.backgroundImage = "url(./images/" + i +".jpg)"
         availableBoxes.splice(random, 1)
 
         //second from the pair
         var random = Math.floor((Math.random() * availableBoxes.length))
-        document.getElementById("box" + availableBoxes[random]).getElementsByClassName("box-back")[0].innerHTML = i
+        var box = document.getElementById("box" + availableBoxes[random]).getElementsByClassName("box-back")[0]
+        box.innerHTML = i
+        box.style.backgroundImage = "url(./images/" + i +".jpg)"
         availableBoxes.splice(random, 1)
 
     }
@@ -24,7 +39,7 @@ var restartGameState = () => {
     
 
 
-    var boxes = document.getElementsByClassName("box")
+    var boxes = document.getElementsByClassName("box-inner")
     for(var b = 0; b < boxes.length; b++){
         boxes[b].addEventListener("click", (e)=>{
             flipCard(e)
@@ -34,14 +49,6 @@ var restartGameState = () => {
 }
 
 
-
-
-restartGameState()
-
-var player = 1
-var oneAlreadyFliped = false;
-var firstCard = -1;
-var secondCard = -2;
 
 var flipCard = (e)=>{
     if(oneAlreadyFliped == false){
@@ -94,7 +101,7 @@ var flipSecond = (e)=>{
             }
             overScreen.style.zIndex = -1
             if(collectedCount == 18){end()}
-        }, 3000);
+        }, 2950);
     }
     //NOT MATCH
     else{
@@ -127,11 +134,44 @@ var end = ()=>{
     else{win(2)}
 }
 
+//restart button -> restart game state
+var prepareResButton = ()=>{
+    restartButton.addEventListener("click", ()=>{
+        endPopUp.style.display = "none"
+        restartButton.style.display = "none"
+        overScreen.style.zIndex = -1
+        overScreen.style.backgroundColor = "rgb(0,0,0)"
+        restartGameState()
+    })
+}
 
 var draw = ()=>{
     console.log("DRAW")
+    endPopUp.style.display = "block"
+    restartButton.style.display = "block"
+    overScreen.style.zIndex = 100
+    overScreen.style.backgroundColor = "rgba(0,0,0,0.8)"
+    endPopUp.innerHTML = "DRAW"
+    prepareResButton()
 }
 
 var win = (player)=>{
     console.log("WIN"+player)
+    endPopUp.style.display = "block"
+    restartButton.style.display = "block"
+    overScreen.style.zIndex = 100
+    overScreen.style.backgroundColor = "rgba(0,0,0,0.8)"
+    if(player == 1){
+        endPopUp.innerHTML = "GREEN HAS WON!"
+        endPopUp.style.color = "rgb(19, 102, 51)"
+    }
+    else{
+        endPopUp.innerHTML = "BLUE HAS WON!"
+        endPopUp.style.color = "rgb(35, 73, 199)"
+    }
+    prepareResButton()
 }
+
+
+
+restartGameState()
