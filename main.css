@@ -9,12 +9,27 @@ main{
     align-items: center;
 }
 
+#turn{
+    color: rgb(19, 102, 51);
+    font-size: 90px;
+    transition: all ease-in-out 0.3s;
+}
+
 #pexeso{
     position: absolute;
     transform: translate(-50%, 0);
     top: 10vh;
     left: 50vw;
     width: calc(6*110px);
+}
+
+#overScreen{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    right: 0;
+    top: 0;
+    z-index: -1;
 }
 
 .box{
@@ -25,9 +40,8 @@ main{
     color: black;
     font-size: 30px;
     perspective: 1000px;
-
-    /*test purposes*/
-    /* color:transparent; */
+    z-index: 5;
+    
 }
 
 .box > .box-inner{
@@ -37,9 +51,10 @@ main{
     text-align: center;
     transition: all ease-in-out 0.6s;
     transform-style: preserve-3d;
-    background-color: green;
-    border:solid 2px black;
+    background-color: rgb(53, 53, 53);
+    /* border:solid 2px black; */
     border-radius: 5px;
+    animation: 3s;
 }
 
 .box .box-front, .box .box-back{
@@ -48,10 +63,11 @@ main{
     height: 100%;
     -webkit-backface-visibility: hidden; /* Safari */
     backface-visibility: hidden;
+    border-radius: 5px;
 }
 
 .box .box-back{
-    background-color: dodgerblue;
+    background-color: rgb(150, 150, 150);
     color: white;
     transform: rotateY(180deg);
 }
@@ -62,10 +78,66 @@ main{
     transform: rotateY(180deg);
 }
 
-/* .box:hover > .box-inner{
-    transform: rotateY(180deg);
-} */
+@keyframes player1CardMatch{
+    25%{
 
+        transform: scale(1.2) rotateY(180deg);
+        outline: solid rgb(19, 102, 51) 2px;
+    }
+
+    35%{
+        transform: scale(1) rotateY(180deg);
+        outline: solid rgb(19, 102, 51) 5px;
+    }
+    55%{
+        transform: scale(1.2) rotateY(180deg);
+        outline: solid rgb(19, 102, 51) 2px;
+    }
+    80%{
+        transform: scale(1) rotateY(180deg);
+        outline: solid rgb(19, 102, 51) 5px;
+    }
+    100%{
+        transform: scale(0) rotate(360deg) rotateY(180deg);
+    }
+}
+
+@keyframes player2CardMatch{
+    25%{
+
+        transform: scale(1.2) rotateY(180deg);
+        outline: solid rgb(35, 73, 199) 2px;
+    }
+
+    35%{
+        transform: scale(1) rotateY(180deg);
+        outline: solid rgb(35, 73, 199) 5px;
+    }
+    55%{
+        transform: scale(1.2) rotateY(180deg);
+        outline: solid rgb(35, 73, 199) 2px;
+    }
+    80%{
+        transform: scale(1) rotateY(180deg);
+        outline: solid rgb(35, 73, 199) 5px;
+    }
+    100%{
+        transform: scale(0) rotate(360deg) rotateY(180deg);
+    }
+}
+
+/*Player1*/
+#player1{
+    position: absolute;
+    left: 200px;
+    bottom: 200px;
+}
+/*Player2*/
+#player2{
+    position: absolute;
+    right: 200px;
+    bottom: 200px;
+}
 
 /*BOX POSITIONS*/
 #box1{position: absolute; top: 0; left: 0;}

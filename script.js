@@ -1,5 +1,9 @@
 
-
+var overScreen = document.getElementById("overScreen")
+var player1Score = document.getElementById("player1Score")
+var player2Score = document.getElementById("player2Score")
+var turn = document.getElementById("turn")
+var collectedCount = 0
 
 
 var restartGameState = () => {
@@ -34,7 +38,7 @@ var restartGameState = () => {
 
 restartGameState()
 
-
+var player = 1
 var oneAlreadyFliped = false;
 var firstCard = -1;
 var secondCard = -2;
@@ -52,21 +56,82 @@ var flipFirst = (e)=>{
     e.target.style.transform = "rotateY(180deg)"
     firstCard = e.target
     oneAlreadyFliped = true
+    //overScreen - fast clicking prevention
+    overScreen.style.zIndex = 100
+    setTimeout(() => {
+        overScreen.style.zIndex = -1
+    }, 400);
+
 }
 
 var flipSecond = (e)=>{
     e.target.style.transform = "rotateY(180deg)"
+    //overScreen - fast clicking prevention
+    overScreen.style.zIndex = 100
     secondCard = parseInt(e.target.getElementsByClassName("box-back")[0].innerHTML)
+    //MATCH
     if(parseInt(firstCard.getElementsByClassName("box-back")[0].innerHTML) == secondCard){
-        console.log("MATCH!")
+        collectedCount++
+        if(player == 1){
+            firstCard.style.animationName = "player1CardMatch"
+            e.target.style.animationName = "player1CardMatch"
+        }
+        else{
+            firstCard.style.animationName = "player2CardMatch"
+            e.target.style.animationName = "player2CardMatch"
+        }
+        
+        setTimeout(() => {
+            firstCard.style.animationName = "none"
+            firstCard.style.display = "none"
+            e.target.style.animationName = "none"
+            e.target.style.display = "none"
+            if(player == 1){
+                player1Score.innerHTML = parseInt(player1Score.innerHTML) + 1
+            }
+            else{
+                player2Score.innerHTML = parseInt(player2Score.innerHTML) + 1
+            }
+            overScreen.style.zIndex = -1
+            if(collectedCount == 18){end()}
+        }, 3000);
     }
+    //NOT MATCH
     else{
-        console.log("notMatch!")
+        setTimeout(()=>{
+            overScreen.style.zIndex = -1
+        }, 1600)
         setTimeout(() => {
             firstCard.style.transform = "rotateY(0deg)"
             e.target.style.transform = "rotateY(0deg)"
+            //player switch
+            if(player == 1){
+                player = 2
+                turn.style.color = "rgb(35, 73, 199)"
+            }
+            else{
+                player = 1
+                turn.style.color = "rgb(19, 102, 51)"
+            }
         }, 1000);
     }
     oneAlreadyFliped = false
     
+}
+
+var end = ()=>{
+    score1 = parseInt(player1Score.innerHTML)
+    score2 = parseInt(player2Score.innerHTML)
+    if(score1 == score2){draw()}
+    else if(score1 > score2){win(1)}
+    else{win(2)}
+}
+
+
+var draw = ()=>{
+    console.log("DRAW")
+}
+
+var win = (player)=>{
+    console.log("WIN"+player)
 }
